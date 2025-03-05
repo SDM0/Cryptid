@@ -21,7 +21,7 @@ target = 'functions/common_events.lua'
 pattern = "if not strip_edition then"
 position = 'before'
 payload = '''
-if new_card.ability.name == "cry-longboi" then new_card.ability.extra.monster = G.GAME.monstermult end
+if new_card.ability.name == "cry-longboi" then new_card:set_ability(new_card.config.center) end
 '''
 match_indent = true
 
@@ -480,5 +480,15 @@ pattern = '''if key == "escape" then'''
 position = "after"
 payload = '''
 	G.cry_edeck_select = nil
+'''
+match_indent = true
+# Make vanilla edition tags Nope! if all jokers in shop have editions
+[[patches]]
+[patches.pattern]
+target = "tag.lua"
+pattern = "local _applied = nil"
+position = "after"
+payload = '''
+if Cryptid.forced_edition() then self:nope() end
 '''
 match_indent = true
